@@ -1,0 +1,2 @@
+# Konek
+Singleton Pattern Implementation
