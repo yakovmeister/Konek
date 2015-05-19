@@ -4,10 +4,6 @@ require('vendor/autoload.php');
 
 use Yakovmeister\Konek\Konek;
 use Yakovmeister\Konek\KonekCRUD;
-use Yakovmeister\Konek\KonekModel;
-
-$konek = new Users;
-$konek->find(1);
 
 // initialize new instance of Connector 
 $connection = Konek::getInstance();
