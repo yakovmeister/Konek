@@ -1,0 +1,20 @@
+{
+    "name": "yakovmeister/konek",
+    "description": "simple and basic PDO connector for easy connection",
+    "authors": [
+        {
+            "name": "Jacob Baring",
+            "email": "electro7bug@gmail.com"
+        }
+    ],
+    "autoload" : {
+        "psr-4" : {
+            "Yakovmeister\\" : "src/"
+        },
+        "classmap" : [
+            "model"
+        ]
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
