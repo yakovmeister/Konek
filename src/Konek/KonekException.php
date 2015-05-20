@@ -30,4 +30,15 @@ class KonekException extends \Exception
 		];
 	}
 
+	public function catch($className, Closure $closure)
+	{
+		try
+		{
+			$closure();
+			
+		} catch(KonekException $ex) {
+
+		}
+	}
+
 }

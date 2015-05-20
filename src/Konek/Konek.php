@@ -105,12 +105,12 @@ class Konek extends KonekException
 
 		return $this->isActive(); 
 	}
-
+	
 	private function getPDOAttributes()
 	{
 		return [
 			PDO::ATTR_DEFAULT_FETCH_MODE 	=> PDO::FETCH_ASSOC,
-			PDO::ATTR_PERSISTENT			=> true
+		//	PDO::ATTR_PERSISTENT			=> true
 		];
 	}
 
