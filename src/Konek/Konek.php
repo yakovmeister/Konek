@@ -1,6 +1,7 @@
 <?php namespace Yakovmeister\Konek;
 
-use PDO;
+use \PDO;
+use \PDOException;
 
 /**
  *	@author Jacob Baring (Yakovmeister)
@@ -22,13 +23,6 @@ class Konek extends KonekException
 
 	protected $_result;
 
-	protected static $_instance;
-
-	public static function getInstance()
-	{
-		return (!isset($_instance) ? self::$_instance = new self() : self::$_instance);
-	}
-
 	public function __construct() 
 	{
 		if(!$this->hasConnectionProperties() || !$this->isActive())
@@ -37,20 +31,22 @@ class Konek extends KonekException
 			$this->open();		
 		}
 	}
-  
+ 
 	public function getConnectionProperties() 
 	{
+
 		try {
 
 			$this->connectionProperties = @require($this->getConfig());
 
-			if(!$this->hasConnectionProperties()) throw new KonekException("Cannot fetch empty connection properties");
+			if(!$this->hasConnectionProperties()) throw new KonekException("Cannot fetch empty connection properties", 1);
 
 			return $this->connectionProperties;	
 		
 		} catch (KonekException $ex) {
-			echo $ex->getMessage();
+			
 		}
+	
 	}
 
 	public function hasConnectionProperties()
@@ -72,10 +68,7 @@ class Konek extends KonekException
 
 	public function hasConfig()
 	{
-		if(isset($this->_configPath) && file_exists($this->_configPath))
-			return true;
-		else
-			return false;
+		return isset($this->_configPath) && file_exists($this->_configPath)	? true : false;
 	}
 
 	public function setConfig($path)
@@ -87,9 +80,7 @@ class Konek extends KonekException
 
 	public function isActive()
 	{
-		if(!is_null($this->_db)) return true;
-
-		return false;
+		return ($this->_db instanceof PDO);
 	}
 
 	public function open()
@@ -99,16 +90,23 @@ class Konek extends KonekException
 			if(!$this->hasConnectionProperties()) throw new KonekException("Cannot establish empty connection.", 0);	
 			
 			try {	
-				$this->_db = new PDO($this->getConnectionDSN(), $this->getConnectionUsername(), $this->getConnectionPassword(), $this->getPDOAttributes());
+
+					$this->_db = ($this->isActive()) ? $this->_db : new PDO($this->getConnectionDSN(), $this->getConnectionUsername(), $this->getConnectionPassword(), $this->getPDOAttributes());							
+
 			} catch(PDOException $ex) {
+		
 				throw new KonekException($ex->getMessage(), 1);
+		
 			}
 		} catch(KonekException $ex) {
 			// Log Later
-		} 
+			// Notify::error($ex->__toArray());
+		}
+
+		return $this->isActive(); 
 	}
 
-	public function getPDOAttributes()
+	private function getPDOAttributes()
 	{
 		return [
 			PDO::ATTR_DEFAULT_FETCH_MODE 	=> PDO::FETCH_ASSOC,
@@ -116,7 +114,7 @@ class Konek extends KonekException
 		];
 	}
 
-	public function getConnectionDSN()
+	private function getConnectionDSN()
 	{
 		if($this->hasConnectionProperties())
 		{
@@ -124,7 +122,7 @@ class Konek extends KonekException
 		}
 	}
 
-	public function getConnectionUsername()
+	private function getConnectionUsername()
 	{
 		if($this->hasConnectionProperties())
 		{
@@ -132,7 +130,7 @@ class Konek extends KonekException
 		}
 	}
 
-	public function getConnectionPassword()
+	private function getConnectionPassword()
 	{
 		if($this->hasConnectionProperties())
 		{
@@ -152,6 +150,8 @@ class Konek extends KonekException
 	public function close() 
 	{
 		$this->_db = null;
+
+		return $this->isActive();
 	}
 
 	public function table($table = null)
@@ -234,7 +234,9 @@ class Konek extends KonekException
 			return $this->_db->query($this->_query)->fetchAll()[0];
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -266,7 +268,9 @@ class Konek extends KonekException
 			return $this->_db->query($this->_query)->fetchAll();
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -283,7 +287,9 @@ class Konek extends KonekException
 			return @( ($place >= 1) ? $this->_result->fetchAll()[($place - 1)] : $this->_result->fetchAll());
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -298,7 +304,9 @@ class Konek extends KonekException
 			return $this->_db->exec($query);
 
 		} catch(PDOException $ex) {
+		
 			throw new Exception($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -315,7 +323,9 @@ class Konek extends KonekException
 			return $this->_db->exec($this->_query);
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -332,7 +342,9 @@ class Konek extends KonekException
 			return $this->_db->exec("INSERT INTO {$this->_table} ({$list['key']}) VALUES ({$list['values']})");
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -349,7 +361,9 @@ class Konek extends KonekException
 			return $this->_db->exec("UPDATE {$this->_table} SET {$list} WHERE id={$id}");
 
 		} catch(PDOException $ex) {
+		
 			throw new KonekException($ex->getMessage(), $ex->getCode());
+		
 		} catch (KonekException $ex) {
 
 		}
@@ -358,15 +372,16 @@ class Konek extends KonekException
 	public function commaSeparate(array $values)
 	{
 		$commaSeparated['values'] 	= '';
-		$commaSeparated['key'] 	= '';
+		$commaSeparated['key'] 		= '';
+
 		foreach ($values as $key => $value) 
 		{
-			$commaSeparated['values'] .= "'{$value}',";
-			$commaSeparated['key']  .= "{$key},";
+			$commaSeparated['values'] 	.= "'{$value}',";
+			$commaSeparated['key']  	.= "{$key},";
 		}
 
-		$commaSeparated['key']  = trim($commaSeparated['key'], ",");
-		$commaSeparated['values'] = trim($commaSeparated['values'], ",");
+		$commaSeparated['key']  	= trim($commaSeparated['key'], ",");
+		$commaSeparated['values'] 	= trim($commaSeparated['values'], ",");
 
 		return $commaSeparated;
 	}
@@ -380,9 +395,7 @@ class Konek extends KonekException
 			$assignSeparated .= "{$key}='{$value}', ";
 		}
 
-		$assignSeparated  = trim($assignSeparated, ", ");
-		
-		return $assignSeparated;	
+		return trim($assignSeparated, ", ");
 	}
 
 	public function isMultiDimension(array $array)

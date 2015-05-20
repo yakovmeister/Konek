@@ -1,5 +1,6 @@
 <?php namespace Yakovmeister\Konek;
 
+use \Closure;
 /**
  *	@author Jacob Baring (Yakovmeister)
  *			http://www.facebook.com/rwx777kid.ph
@@ -28,4 +29,5 @@ class KonekException extends \Exception
 			'message'	=> $this->message
 		];
 	}
+
 }

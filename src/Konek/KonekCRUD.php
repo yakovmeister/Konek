@@ -15,16 +15,9 @@ class KonekCRUD implements KonekCRUDInterface
 
 	protected $konek;
 
-	protected static $_instance;
-
-	public static function getInstance()
+	public function __construct(Konek $app)
 	{
-		return (!isset($_instance) ? self::$_instance = new self() : self::$_instance);
-	}
-
-	protected function __construct()
-	{
-		$this->konek = Konek::getInstance();
+		$this->konek = $app;
 	}	
 
 	public function table($tableName)
