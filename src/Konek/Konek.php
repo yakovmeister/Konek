@@ -22,12 +22,12 @@ class Konek extends KonekException
 
 	protected $_result;
 
-	protected static $_instance;
+//	protected static $_instance;
 
-	public static function getInstance()
-	{
-		return (!isset($_instance) ? self::$_instance = new self() : self::$_instance);
-	}
+//	public static function getInstance()
+//	{
+//		return (!isset($_instance) ? self::$_instance = new self() : self::$_instance);
+//	}
 
 	public function __construct() 
 	{
