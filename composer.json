@@ -1,6 +1,6 @@
 {
     "name": "yakovmeister/konek",
-    "description": "simple and basic PDO connector for easy connection",
+    "description": "Easy to use PDO wrapper",
     "authors": [
         {
             "name": "Jacob Baring",
@@ -10,10 +10,7 @@
     "autoload" : {
         "psr-4" : {
             "Yakovmeister\\" : "src/"
-        },
-        "classmap" : [
-            "model"
-        ]
+        }
     },
     "minimum-stability": "dev",
     "require": {}
