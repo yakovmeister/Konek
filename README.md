@@ -15,6 +15,7 @@
 - DB::create(array $array) method added
 - DB::find($id) method added
 - DB::rm($id) method added
+
 ###2.0.0.0###
 - init
 
