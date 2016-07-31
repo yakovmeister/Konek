@@ -11,5 +11,3 @@ use Yakovmeister\Konek\Database\Sqlite\SqliteConnection;
 $data = DB::instance("users", new SqliteConnection)->get();
 
 $data = DB::instance("users", new SqliteConnection)->find(1);
-
-var_dump($data["password"]);

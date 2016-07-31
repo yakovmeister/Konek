@@ -311,7 +311,7 @@ trait Query
 
 				$this->query .= $this->whereExpression;				
 				
-				if($this->limit) $this->query .= " LIMIT {$this->limit}";
+			//	if($this->limit) $this->query .= " LIMIT {$this->limit}";
 
 			break;
 		}
@@ -437,8 +437,10 @@ trait Query
         if ($value === '*') {
             return $value;
         }
+		
+		if(!is_numeric($value)) return '"'.str_replace('"', '""', $value).'"';
 
-        return '"'.str_replace('"', '""', $value).'"';
+		return $value;
 	}
 
 	/**
@@ -455,7 +457,9 @@ trait Query
 		$cache = [];
 
 		foreach ($array as $value) {
+
 			$cache[] = $this->wrap($value);
+			
 		}
 
 		return $cache;
