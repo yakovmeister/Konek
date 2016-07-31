@@ -1,8 +1,8 @@
 <?php
 
-namespace Konek\Database\Mysql;
+namespace Yakovmeister\Konek\Database\Mysql;
 
-use Konek\Database\Connection;
+use Yakovmeister\Konek\Database\Connection;
 
 class MysqlConnection extends Connection
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Konek\Database;
+namespace Yakovmeister\Konek\Database;
 
-use Konek\Database\Connection;
+use Yakovmeister\Konek\Database\Connection;
 
 class DB
 {
@@ -12,11 +12,11 @@ class DB
 
 	protected $connection;
 
-	public function __construct($table = null, \Konek\Database\Connection $connection = null)
+	public function __construct($table = null, \Yakovmeister\Konek\Database\Connection $connection = null)
 	{
 		$this->table = $table;
 
-		$this->connection = $connection ?? new \Konek\Database\Mysql\MysqlConnection;
+		$this->connection = $connection ?? new \Yakovmeister\Konek\Database\Mysql\MysqlConnection;
 
 		$this->connection->setConnection();
 	}
@@ -29,7 +29,7 @@ class DB
 	 */
 	public function get()
 	{
-		if(!$this->connection->hasConnection()) throw new \Exception("Uninitialized Connection");
+		$this->checkConnection();
 
 		return $this->connection->getConnection()->query($this->compile())->fetchAll();
 	}
@@ -42,9 +42,23 @@ class DB
 	 */
 	public function execute()
 	{
-		if(!$this->connection->hasConnection()) throw new \Exception("Uninitialized Connection");	
-		
+		$this->checkConnection();
+
 		return $this->connection->getConnection()->exec($this->compile());	
+	}
+
+	public function find($id)
+	{
+		$this->checkConnection();
+	
+		return $this->connection->getConnection()->query($this->where("id","=",$id)->limit(1)->compile())->fetchAll()[0];
+	}
+
+	public function checkConnection()
+	{
+		if(!$this->connection->hasConnection()) throw new \Exception("Uninitialized Connection");	
+
+		return ;	
 	}
 
 	/**
@@ -56,7 +70,7 @@ class DB
 	 * @param $table, Konek\Database\Connection $connection
 	 * @return \Konek\Database\DB
 	 */
-	public static function instance($table = null, \Konek\Database\Connection $connection = null)
+	public static function instance($table = null, \Yakovmeister\Konek\Database\Connection $connection = null)
 	{
 		return static::$singleton ?? new self($table, $connection);
 	}
