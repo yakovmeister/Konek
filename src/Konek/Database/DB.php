@@ -16,9 +16,9 @@ class DB
 	public function __construct($table = null, Connection $connection = null)
 	{
 		$this->table = $table;
-
+		
 		$this->connection = $connection ?? new MysqlConnection;
-
+		
 		$this->connection->setConnection();
 	}
 
@@ -44,7 +44,7 @@ class DB
 	public function execute()
 	{
 		$this->checkConnection();
-		
+
 		return $this->connection->getConnection()->exec($this->compile());	
 	}
 

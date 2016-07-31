@@ -6,6 +6,18 @@
 * Just a simple PDO wrapper
 * Easy to use
 
+## Changelogs ##
+
+###2.0.0.1###
+- Sqlite support
+- Removed limits on delete
+- Organize Namespace
+- DB::create(array $array) method added
+- DB::find($id) method added
+- DB::rm($id) method added
+###2.0.0.0###
+- init
+
 ## Prerequisite ##
 
 * PHP >= 7
