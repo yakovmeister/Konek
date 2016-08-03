@@ -2,5 +2,6 @@
 /src/Container
 /src/Config
 /src/File
+/src/Database/Exception
 /db/*.sqlite
 /config
