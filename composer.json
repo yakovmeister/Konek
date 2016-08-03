@@ -10,7 +10,10 @@
     "autoload" : {
         "psr-4" : {
             "Yakovmeister\\" : "src/"
-        }
+        },
+        "files" : [
+            "src/Util/utils.php"
+        ]
     },
     "minimum-stability": "dev",
     "require": {}

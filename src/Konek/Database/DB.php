@@ -32,7 +32,20 @@ class DB
 	{
 		$this->checkConnection();
 
-		return $this->connection->getConnection()->query($this->compile())->fetchAll();
+		return json_encode($this->connection->getConnection()->query($this->compile())->fetchAll());
+	}
+
+	/**
+	 * Fetch all data from database
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function all()
+	{
+		$this->checkConnection();
+
+		return $this->get();
 	}
 
 	/**
@@ -56,9 +69,10 @@ class DB
 	 */
 	public function create(array $data)
 	{
-		if(!$this->is_assoc_array($data)) throw new \Exception("DB::create method expects associative array, sequencial given");
+		if(!is_assoc_array($data)) throw new \Exception("DB::create method expects associative array, sequencial given");
 
 		$keys = array_keys($data);
+
 		$values = array_values($data);
 
 		return $this->insert($values)->into($keys)->execute();
@@ -90,7 +104,13 @@ class DB
 		return $this->connection->getConnection()->query($this->where("id","=",$id)->limit(1)->compile())->fetchAll()[0];
 	}
 
-	public function checkConnection()
+	/**
+	 * Check if connection has been initialized
+	 *
+	 * @access public
+	 * @return
+	 */
+	public function checkConnection() 
 	{
 		if(!$this->connection->hasConnection()) throw new \Exception("Uninitialized Connection");	
 

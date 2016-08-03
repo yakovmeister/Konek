@@ -167,7 +167,7 @@ trait Query
 
 		$values = func_num_args() > 1 ? func_get_args() : $values;
 
-		$this->expression = $this->chainWrap($values);
+		$this->expression = chainWrap($values);
 
 		return $this;
 	}
@@ -197,17 +197,9 @@ trait Query
 	 */
 	public function update($id, $value)
 	{
-		$this->command = strtoupper(__FUNCTION__);
-
-		if(!is_array($value)) throw new \Exception("Update method expecting one argument as array ".gettype($value)." given");
-		if(!$this->is_assoc_array($value)) throw new \Exception("Update method expecting Associative Array, Sequencial given");
-
 		$this->updateWhere("id","=", $id, $value);
 
-	//	$this->where("id", $id)->limit(1);
-
 		return $this;
-
 	}
 
 	/**
@@ -222,7 +214,7 @@ trait Query
 		$this->command = strtoupper(substr(__FUNCTION__, 0, 6));
 
 		if(!is_array($values)) throw new \Exception("Update method expecting one argument as array ".gettype($value)." given");
-		if(!$this->is_assoc_array($values)) throw new \Exception("Update method expecting Associative Array, Sequencial given");
+		if(!is_assoc_array($values)) throw new \Exception("Update method expecting Associative Array, Sequencial given");
 
 		foreach ($values as $key => $val) {
 			$this->expression[] = "{$key} = \"{$value}\"";
@@ -233,18 +225,6 @@ trait Query
 		$this->where($column, $operator, $value)->limit($limit);
 
 		return $this;
-	}
-
-	/**
-	 * Check if array is associative
-	 *
-	 * @param $array
-	 * @access public
-	 * @return bool
-	 */
-	public function is_assoc_array($array)
-	{
-		return array_keys($array) !== range(0, count($array) - 1);
 	}
 
 	/**
@@ -265,7 +245,7 @@ trait Query
 
 				$this->query .= $this->distinct ? " DISTINCT " : " ";
 
-				$this->query .= $this->count == true ? "COUNT({$this->chain()}) " : $this->chain($this->columns) ?? $this->chain();
+				$this->query .= $this->count == true ? "COUNT(".chain().") " : chain($this->columns) ?? chain();
 
 				$this->query .= " FROM {$this->table}";
 
@@ -273,7 +253,7 @@ trait Query
 
 				if(!$this->raw)
 				{	
-					if($this->groupBy) $this->query .= " GROUP BY {$this->chain($this->groupBy)}";
+					if($this->groupBy) $this->query .= " GROUP BY ".chain($this->groupBy);
 
 					if($this->orders) $this->query .= " ORDER BY {$this->orders["column"]} {$this->orders["direction"]}";
 
@@ -300,7 +280,7 @@ trait Query
 			
 				$this->query .= " INTO {$this->table}";
 
-				$this->query .= $this->columns ? " ({$this->chain($this->columns)})" ?? $this->chain() : " ";
+				$this->query .= $this->columns ? " (".chain($this->columns).")" ?? chain() : " ";
 				
 				$this->query .= " VALUES ({$this->expression})";
 
@@ -398,74 +378,6 @@ trait Query
 	}
 
 	/**
-	 * Convert array to string as listed items
-	 *
-	 * @param $columns
-	 * @access public
-	 * @return string
-	 */
-	public function chain($columns = ['*'])
-	{
-		if(!is_array($columns)) return $columns;
-
-		return implode(", ", $columns);
-	}
-
-	/**
-	 * Convert array to string as listed items and wrap them with quote
-	 *
-	 * @param $values
-	 * @access public
-	 * @return string
-	 */
-	public function chainWrap($values)
-	{
-		$values = is_array($values) ? $values : func_get_args();
-
-		return implode(", ", $this->wrapArray($values));
-	}
-
-	/**
-	 * Wrap string with quote
-	 *
-	 * @param $value
-	 * @access public
-	 * @return string
-	 */
-	public function wrap($value)
-	{
-        if ($value === '*') {
-            return $value;
-        }
-		
-		if(!is_numeric($value)) return '"'.str_replace('"', '""', $value).'"';
-
-		return $value;
-	}
-
-	/**
-	 * Query::wrap for array
-	 *
-	 * @param $array
-	 * @access public
-	 * @return string
-	 */
-	public function wrapArray($array)
-	{
-		if(!is_array($array)) return $this->wrap($array);
-		
-		$cache = [];
-
-		foreach ($array as $value) {
-
-			$cache[] = $this->wrap($value);
-			
-		}
-
-		return $cache;
-	}
-
-	/**
 	 * Set table
 	 *
 	 * @param $table
@@ -504,7 +416,7 @@ trait Query
 	 * @access public
 	 * @return bool
 	 */
-	public function invalidOperator($operator)
+	public function invalidOperator($operator) : bool
 	{
 		$operator = explode(' ', $operator);
 
@@ -524,7 +436,7 @@ trait Query
 	 * @access public
 	 * @return \Konek\Database\Query
 	 */
-	public function where($column, $operator = null, $value = null, $boolean = 'and')
+	public function where($column, $operator = null, $value = null, $boolean = null)
 	{
 		$boolean = strtoupper($boolean);
 
@@ -539,8 +451,8 @@ trait Query
 			throw new \Exception("Invalid Operator");
 		}
 
-		if($this->whereExpression) $this->whereExpression .= " {$boolean} {$whereClause} {$column} {$operator} {$this->wrapArray($value)}";
-		else $this->whereExpression = " {$whereClause} {$column} {$operator} {$this->wrapArray($value)}";
+		if($this->whereExpression && !is_null($boolean)) $this->whereExpression .= " {$boolean} {$whereClause} {$column} {$operator} ".wrapArray($value);
+		else $this->whereExpression = " {$whereClause} {$column} {$operator} ".wrapArray($value);
 
 		return $this;
 	}
@@ -570,7 +482,7 @@ trait Query
 	 */
 	public function whereAnd($column, $operator = null, $value = null)
 	{
-		return $this->where($column, $operator, $value);
+		return $this->where($column, $operator, $value, 'and');
 	}
 
 	/**

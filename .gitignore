@@ -1,3 +1,6 @@
 /vendor
 /src/Container
+/src/Config
+/src/File
 /db/*.sqlite
+/config
