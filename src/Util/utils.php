@@ -89,14 +89,4 @@
 			return $cache;
 		}
 	}
-
-	/**
-	 *
-	 *
-	 *
-	 */
-	if(! function_exists(''))
-	{
-		
-	}
 	
