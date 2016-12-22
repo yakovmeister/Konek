@@ -66,9 +66,9 @@ class Config
 	{
 		if(count($this->finder->name("{$filename}.php")) <= 0) throw new \Exception("File you are trying to load does not exists.");
 
-		$this->loaded[$filename] = @require("{$this->dir}/{$filename}.php");
-
 		$this->lastUsedConfig = $filename;
+
+		$this->loaded[$filename] = @require("{$this->dir}/{$filename}.php");
 
 		return $this;
 	}
@@ -81,8 +81,8 @@ class Config
 	public function use($configuration = null)
 	{
 		return is_null($configuration)
-			? $this->loaded[$lastUsedConfig]
-			: $this->loaded[$lastUsedConfig][$configuration];
+			? $this->loaded[$this->lastUsedConfig]
+			: $this->loaded[$this->lastUsedConfig][$configuration];
 	}
 
 	/**

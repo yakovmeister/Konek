@@ -89,4 +89,12 @@
 			return $cache;
 		}
 	}
+
+	if(!function_exists('root_path'))
+	{
+		function root_path()
+		{
+			return dirname(dirname(__DIR__));
+		}
+	}
 	

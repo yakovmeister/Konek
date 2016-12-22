@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'default' 		=> 'mysql',
+	'default' => 'sqlite',
 	'connections' 	=> [
 
 		'mysql' => [
@@ -12,7 +12,7 @@ return [
 		],
 
 		'sqlite' => [
-			'database' => 'db.sqlite'
+			'database' => 'db/database.sqlite'
 		]
 	]
 ];

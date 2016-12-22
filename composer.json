@@ -18,6 +18,5 @@
             "src/Util/utils.php"
         ]
     },
-    "minimum-stability": "dev",
-    "require": {}
+    "minimum-stability": "dev"
 }

@@ -3,5 +3,5 @@
 /src/Config
 /src/File
 /src/Database/Exception
-/db/*.sqlite
+/db/db.sqlite
 /config

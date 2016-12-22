@@ -3,7 +3,8 @@
 namespace Yakovmeister\Konek\Database;
 
 use Yakovmeister\Konek\Database\Connection;
-use Yakovmeister\Konek\Database\Mysql\MysqlConnection;
+use Yakovmeister\Konek\Configure\Config;
+use Symfony\Component\Finder\Finder;
 
 class DB
 {
@@ -13,11 +14,11 @@ class DB
 
 	protected $connection;
 
-	public function __construct($table = null, Connection $connection = null)
+	public function __construct($table = null)
 	{
 		$this->table = $table;
 		
-		$this->connection = $connection ?? new MysqlConnection;
+		$this->connection = new Connection(new Config(new Finder));
 		
 		$this->connection->setConnection();
 	}
