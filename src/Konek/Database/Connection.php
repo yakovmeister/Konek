@@ -18,6 +18,10 @@ class Connection implements ConnectionInterface
 		$this->configuration = $config;
 	}
 
+	/**
+	 * set connection based on the configuration file provided
+	 * @return $this
+	 */
 	public function setConnection()
 	{
 		$connection = $this->configuration->load('database')->use('default');
@@ -42,6 +46,10 @@ class Connection implements ConnectionInterface
 		return $this;
 	}
 
+	/**
+	 * remove connection, set $this->connection to null
+	 * @return [type] [description]
+	 */
 	public function purgeConnection()
 	{
 		$this->connection = null;
@@ -49,11 +57,19 @@ class Connection implements ConnectionInterface
 		return $this;
 	}
 
+	/**
+	 * check if there's an active connection
+	 * @return boolean [description]
+	 */
 	public function hasConnection()
 	{
 		return isset($this->connection) && $this->connection instanceof \PDO;
 	}
 
+	/**
+	 * return current connection
+	 * @return PDO
+	 */
 	public function getConnection()
 	{
 		return $this->connection;

@@ -14,11 +14,19 @@ class DB
 
 	protected $connection;
 
+	/**
+	 * config class instance
+	 * @var Object
+	 */
+	protected $config;
+
 	public function __construct($table = null)
 	{
 		$this->table = $table;
+
+		$this->config = new Config(new Finder);
 		
-		$this->connection = new Connection(new Config(new Finder));
+		$this->connection = new Connection($this->config);
 		
 		$this->connection->setConnection();
 	}

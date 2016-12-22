@@ -12,7 +12,7 @@ return [
 		],
 
 		'sqlite' => [
-			'database' => 'db/database.sqlite'
+			'database' => 'db/db.sqlite'
 		]
 	]
 ];

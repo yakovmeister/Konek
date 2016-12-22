@@ -1,14 +1,32 @@
-# Konek: Simple PDO Wrap by stupid for stupid #
+Konek
 
-## Features ##
+a simple yet working eloquent based PDO wrapper.
 
-* Nothing much
-* Just a simple PDO wrapper
-* Easy to use
 
-## Changelogs ##
 
-###2.0.0.1###
+Prerequisite
+
+- PHP >= 7
+- PDO
+  
+
+Features
+
+- Easy to use
+- configurable configuration file
+  
+
+Changelogs
+
+2.1
+
+- removed mysql and sqlite connection class
+- added configuration file support
+- removed unnecessary classes
+- added root_path() function for detecting konek's root path
+
+1.0 - 2.0 (source removed due to stupidity of the codes)
+
 - Sqlite support
 - Removed limits on delete
 - Organize Namespace
@@ -16,30 +34,50 @@
 - DB::find($id) method added
 - DB::rm($id) method added
 
-###2.0.0.0###
 - init
 
-## Prerequisite ##
+Usage
 
-* PHP >= 7
-* PDO
+by creating instance
 
-## Usage ##
+you can start by creating a DB instance
 
-* You can start by creating a new instance of DB [$sample = new Yakovmeister\Konek\Database\DB("table_name")]
-* Note that, second argument is optional if you're planning to use Mysql, which is the database by default
-* Once you have created a new instance of DB you can do [$sample->get()] which is equivalent to ["select * from table_name"]
-* You can also try [$sample->where("column", "=", "value")->get()] which is equivalent to ["select * from table_name where column = `value`"]
-* you can actually chain multiple where statement [$sample->where("someone","like","you")->where("relationship_status","=","single")->get()] which is equivalent to ["select * from table_name where someone like `you` and where relationship_status = `single`"]
-* you can also set limit by using the limit($count) method [$sample->where('attr', '=', 'handsome')->limit(4)->get()] which is equivalent to ["select * from table_name where attr = `handsome` LIMIT 4"]
-* or you can set an offset, [$sample->where("attr", '=',"handsome")->skip(5)->get()] which is equivalent to ["select * from table_name where attr = `handsome` OFFSET 5"]
+    <?php
+      
+      use Yakovmeister\Konek\Database\DB;
+    
+      $wrapper = new DB;
+      // this is equivalent to `SELECT * FROM users`
+      $wrapper->table('users')->all();
+      // this is equivalent to `SELECT * FROM users where username = 'superadmin'`
+      $wrapper->table('users')->where('username','=','superadmin')->get();
+      
+      // this is equivalent to `INSERT INTO users (username, password) VALUES('admin','vh3Ry53cUr3p45$w0rd')`
+      $wrapper->table('users')->create([
+         'username' => 'admin',
+         'password' => bcrypt('vh3Ry53cUr3p45$w0rd') // assuming you're using bcrypt
+      ]);
+    
+
+for shorter version, you can also do the following to omit using table()
+
+    <?php
+      
+      use Yakovmeister\Konek\Database\DB;
+    
+      $wrapper = new DB("users"); //alternatively you can supply the table name as argument
+      // then you can do...
+      $wrapper->all();
+      // or 
+      $wrapper->where('username','=','superadmin')->get();
 
 
-## FAQ ##
 
-* Y u dis human? As I dig deeper into PHP, I tried to use what I've learned, so Konek was born.
-* human, dis iz stpid, y stil do? Why not? I mean, how else could you practice what you've learned if you're not doing anything? eh?
-* doz it support relationships? As far as I'm concern, this doesn't support relationship yet, it doesn't allow you to call data from related table, I mean it's unfair for me to create a PDO wrapper that could support relationship, yet here I am single and miserable. (lol) however you can use SINGLEton though. HAHAHA
-* cn diz create/delete/edit table? No. But I might add it if I have some more free time, for now let's just settle with what's available.
-* wuht doz it do? well basically, you can only use this to create, update, delete, and read your data from database. Most of the basic jobs.
-* wuht about SQLite? I'm planning to suppport sqlite, but for now, have fun with Mysql. 
+FAQ
+
+- Y u dis human? As I dig deeper into PHP, I tried to use what I've learned, so Konek was born.
+- human, dis iz stpid, y stil do? Why not? I mean, how else could you practice what you've learned if you're not doing anything? eh?
+- doz it support relationships? As far as I'm concern, this doesn't support relationship yet, it doesn't allow you to call data from related table, I mean it's unfair for me to create a PDO wrapper that could support relationship, yet here I am single and miserable. (lol) however you can use SINGLEton though. HAHAHA
+- cn diz create/delete/edit table? No. But I might add it if I have some more free time, for now let's just settle with what's available.
+- wuht doz it do? well basically, you can only use this to create, update, delete, and read your data from database. Most of the basic jobs.
+- wuht about SQLite? I'm planning to suppport sqlite, but for now, have fun with Mysql. 
