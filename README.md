@@ -4,7 +4,7 @@ a simple yet working eloquent based PDO wrapper.
 
 
 
-## Prerequisite ## 
+## Prerequisite ##
 
 - PHP >= 7
 - PDO
