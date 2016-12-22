@@ -1,31 +1,31 @@
-Konek
+# Konek #
 
 a simple yet working eloquent based PDO wrapper.
 
 
 
-Prerequisite
+## Prerequisite ## 
 
 - PHP >= 7
 - PDO
   
 
-Features
+## Features ##
 
 - Easy to use
 - configurable configuration file
   
 
-Changelogs
+## Changelogs ##
 
-2.1
+### 2.1 ###
 
 - removed mysql and sqlite connection class
 - added configuration file support
 - removed unnecessary classes
 - added root_path() function for detecting konek's root path
 
-1.0 - 2.0 (source removed due to stupidity of the codes)
+### 1.0 - 2.0 (source removed due to stupidity of the codes) ###
 
 - Sqlite support
 - Removed limits on delete
@@ -36,9 +36,9 @@ Changelogs
 
 - init
 
-Usage
+## Usage ##
 
-by creating instance
+#### by creating instance ####
 
 you can start by creating a DB instance
 
@@ -73,7 +73,7 @@ for shorter version, you can also do the following to omit using table()
 
 
 
-FAQ
+## FAQ ##
 
 - Y u dis human? As I dig deeper into PHP, I tried to use what I've learned, so Konek was born.
 - human, dis iz stpid, y stil do? Why not? I mean, how else could you practice what you've learned if you're not doing anything? eh?
