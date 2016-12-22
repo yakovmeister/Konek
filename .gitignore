@@ -1,8 +1,2 @@
 /vendor
-/src/Container
-/src/Config
-/src/File
-/src/Database/Exception
-/db/db.sqlite
-/config
 /conposer.lock
