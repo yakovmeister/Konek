@@ -1,11 +1,11 @@
 <?php
 
 return [
-	'default' => 'sqlite',
+	'default' => 'mysql',
 	'connections' 	=> [
 
 		'mysql' => [
-			'hostname'	=> 'localhost',
+			'host'		=> 'localhost',
 			'username' 	=> 'root',
 			'password' 	=> '',
 			'database'	=> 'db_test'

@@ -41,7 +41,7 @@ class DB
 	{
 		$this->checkConnection();
 
-		return json_encode($this->connection->getConnection()->query($this->compile())->fetchAll());
+		return (object) json_encode($this->connection->getConnection()->query($this->compile())->fetchAll());
 	}
 
 	/**

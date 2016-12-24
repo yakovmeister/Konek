@@ -5,7 +5,7 @@ namespace Yakovmeister\Konek\Database;
 use \PDO;
 use Yakovmeister\Konek\Configure\Config;
 
-class Connection implements ConnectionInterface
+class Connection
 {
 	protected $connection;
 
@@ -29,8 +29,10 @@ class Connection implements ConnectionInterface
 		switch($connection)
 		{
 			case "mysql":
-				$this->connection = new \PDO(
-					"mysql:dbname={$this->configuration->use($connection)['database']};host=$this->configuration->use('connections')[$connection]['host']",
+			 	$connectionName = "mysql";
+			 	$database = "dbname={$this->configuration->use('connections')[$connection]['database']}";
+			 	$host = "host={$this->configuration->use('connections')[$connection]['host']}";
+				$this->connection = new \PDO("{$connectionName}:{$database};{$host}",
 					$this->configuration->use('connections')[$connection]['username'],
 					$this->configuration->use('connections')[$connection]['password']);
 				break;
@@ -42,6 +44,8 @@ class Connection implements ConnectionInterface
 				$this->connection = new \PDO("sqlite:{$databasePath}");
 				break;
 		}
+
+		$this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 		return $this;
 	}
