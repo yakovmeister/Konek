@@ -127,6 +127,15 @@ class DB
 	}
 
 	/**
+	 * return configuration instance
+	 * @return [type] [description]
+	 */
+	public function config()
+	{
+		return $this->connection->config();
+	}
+
+	/**
 	 * Just in case you need to summon evil spirit, you can call our good friend singleton  
 	 * no need to create a new instance of DB Class, damn it! just provide the table name, and 
 	 * the connection instance. You're good to go.

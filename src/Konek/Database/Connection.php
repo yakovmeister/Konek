@@ -78,4 +78,13 @@ class Connection
 	{
 		return $this->connection;
 	}
+
+	/**
+	 * return configuration instance
+	 * @return [type] [description]
+	 */
+	public function config()
+	{
+		return $this->configuration;
+	}
 }

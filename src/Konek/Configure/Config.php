@@ -68,9 +68,20 @@ class Config
 
 		$this->lastUsedConfig = $filename;
 
-		$this->loaded[$filename] = @require("{$this->dir}/{$filename}.php");
+		$this->loaded[$filename] = !empty($this->loaded[$filename]) 
+								? $this->loaded[$filename]
+								: @require("{$this->dir}/{$filename}.php");
 
 		return $this;
+	}
+
+	/**
+	 * remove values from loaded
+	 * @return [type] [description]
+	 */
+	public function reset()
+	{
+		return unset($this->loaded);
 	}
 
 	/**
@@ -83,6 +94,18 @@ class Config
 		return is_null($configuration)
 			? $this->loaded[$this->lastUsedConfig]
 			: $this->loaded[$this->lastUsedConfig][$configuration];
+	}
+
+	/**
+	 * change the value of a configuration or create new config
+	 * @param [type] $var   [description]
+	 * @param [type] $value [description]
+	 */
+	public function setConfig($var, $value =null)
+	{
+		$this->loaded[$var] = $value;
+
+		return $this;
 	}
 
 	/**
